@@ -1,56 +1,50 @@
-"""
-main.py
-
-This is the main entry point for the FastAPI application. It handles the initialization of 
-the app, setting up the lifespan context, and registering API routes for recipes, menus, 
-ingredients, and other entities related to the cooking application.
-
-The application connects to the database at startup, creates necessary tables if they 
-don't exist, and ensures that the database connection is closed properly upon shutdown.
-"""
-# pylint: disable=E0401
-# Standard library imports
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
-
-# Local imports (from your project)
-from helpers.api_key_auth import get_api_key
 from database import database as connection
-from database import (
-    UserModel, GroupModel, UserGroupModel, IngredientModel, IngredientCategoryModel,
-    RecipeModel, RecipeIngredientModel, RecipeTypeModel, RecipeRecipeTypeModel, 
-    MenuModel, MenuRecipeModel, ShoppingListModel, ShoppingListItemModel,
-    PantryItemModel, UnitModel, NotificationModel, FavoriteRecipeModel
-)
-from routes.recipe_routes import recipe_router
-from routes.menu_routes import menu_router
-from routes.shopping_list_routes import shopping_list_router
-from routes.ingredient_routes import ingredient_router
-from routes.notification_routes import notification_router
+from database import *
+from routes.user_routes import user_route
+# from routes.favorite_recipe_routes import favorite_recipe_route
+# from routes.group_routes import group_route
+# from routes.ingredient_category_routes import ingredient_category_route
+# from routes.ingredient_routes import ingredient_route
+# from routes.menu_recipe_routes import menu_recipe_route
+# from routes.menu_routes import menu_route
+# from routes.notification_routes import notification_route
+# from routes.pantry_item_routes import pantry_item_route
+# from routes.recipe_ingredient_routes import recipe_ingredient_route
+# from routes.recipe_routes import recipe_route
+# from routes.recipe_type_routes import recipe_type_route
+# from routes.shopping_list_item_routes import shopping_list_item_route
+# from routes.shopping_list_routes import shopping_list_route
+# from routes.unit_routes import unit_route
+# from routes.user_group_routes import user_group_route
 
-# Third-party imports
-from fastapi import Depends, FastAPI
-
-
-# Lifespan context manager to handle the lifecycle of the FastAPI app
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     """
-    Manages the lifespan of the FastAPI app. It ensures that the database connection 
+    Manages the lifespan of the FastAPI app. It ensures that the database connection
     is opened at the start of the app's lifecycle and closed when the app shuts down.
-
-    Args:
-        _app (FastAPI): The FastAPI instance.
-
-    Yields:
-        None
     """
     if connection.is_closed():
         connection.connect()
         connection.create_tables([
-            UserModel, GroupModel, UserGroupModel, IngredientModel, IngredientCategoryModel,
-            RecipeModel, RecipeIngredientModel, RecipeTypeModel, RecipeRecipeTypeModel, 
-            MenuModel, MenuRecipeModel, ShoppingListModel, ShoppingListItemModel,
-            PantryItemModel, UnitModel, NotificationModel, FavoriteRecipeModel
+            UserModel
+            # FavoriteRecipe,
+            # Group,
+            # IngredientCategory,
+            # Ingredient,
+            # MenuRecipe,
+            # Menu,
+            # Notification,
+            # PantryItem,
+            # RecipeIngredient,
+            # RecipeRecipeType,
+            # Recipe,
+            # RecipeType,
+            # ShoppingListItem,
+            # ShoppingList,
+            # Unit,
+            # UserGroup
         ])
 
     try:
@@ -60,45 +54,23 @@ async def lifespan(_app: FastAPI):
         if not connection.is_closed():
             connection.close()
 
-
 # Initialize the FastAPI application with the custom lifespan function
 app = FastAPI(lifespan=lifespan)
 
-# API KEY Validation
-@app.get("/protected-endpoint")
-async def protected_endpoint(api_key: str = Depends(get_api_key)):
-    """
-    Protected endpoint that requires a valid API key for access.
-
-    This function handles requests to the /protected-endpoint route. 
-    It validates the API key provided in the request's security header using the 
-    get_api_key function. If the API key is valid, the function grants access 
-    to the protected resource.
-
-    Args:
-        api_key (str): The API key extracted and validated using the get_api_key dependency.
-
-    Returns:
-        dict: A message indicating access to the protected endpoint with the valid API key.
-    """
-    return {"message": f"Acceso concedido a endpoint protegido con el key {api_key}"}
-
-# Register the recipe-related routes
-app.include_router(recipe_router, prefix="/api/recipes",
-                   tags=["recipes"], dependencies=[Depends(get_api_key)])
-
-# Register the menu-related routes
-app.include_router(menu_router, prefix="/api/menus",
-                   tags=["menus"], dependencies=[Depends(get_api_key)])
-
-# Register the shopping list-related routes
-app.include_router(shopping_list_router, prefix="/api/shopping-lists",
-                   tags=["shopping-lists"], dependencies=[Depends(get_api_key)])
-
-# Register the ingredient-related routes
-app.include_router(ingredient_router, prefix="/api/ingredients",
-                   tags=["ingredients"], dependencies=[Depends(get_api_key)])
-
-# Register the notification-related routes
-app.include_router(notification_router, prefix="/api/notifications",
-                   tags=["notifications"], dependencies=[Depends(get_api_key)])
+# Register routes
+app.include_router(user_route, prefix="/api/users", tags=["users"])
+# app.include_router(favorite_recipe_route, prefix="/api/favorite_recipes", tags=["favorite_recipes"])
+# app.include_router(group_route, prefix="/api/groups", tags=["groups"])
+# app.include_router(ingredient_category_route, prefix="/api/ingredient_categories", tags=["ingredient_categories"])
+# app.include_router(ingredient_route, prefix="/api/ingredients", tags=["ingredients"])
+# app.include_router(menu_recipe_route, prefix="/api/menu_recipes", tags=["menu_recipes"])
+# app.include_router(menu_route, prefix="/api/menus", tags=["menus"])
+# app.include_router(notification_route, prefix="/api/notifications", tags=["notifications"])
+# app.include_router(pantry_item_route, prefix="/api/pantry_items", tags=["pantry_items"])
+# app.include_router(recipe_ingredient_route, prefix="/api/recipe_ingredients", tags=["recipe_ingredients"])
+# app.include_router(recipe_route, prefix="/api/recipes", tags=["recipes"])
+# app.include_router(recipe_type_route, prefix="/api/recipe_types", tags=["recipe_types"])
+# app.include_router(shopping_list_item_route, prefix="/api/shopping_list_items", tags=["shopping_list_items"])
+# app.include_router(shopping_list_route, prefix="/api/shopping_lists", tags=["shopping_lists"])
+# app.include_router(unit_route, prefix="/api/units", tags=["units"])
+# app.include_router(user_group_route, prefix="/api/user_groups", tags=["user_groups"])
