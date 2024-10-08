@@ -23,40 +23,48 @@ class UserModel(Model):
         database = database
         table_name = "users"
 
-# class FavoriteRecipe(Model):
-#     id = AutoField(primary_key=True)
-#     user_id = ForeignKeyField(UserModel, backref='favorite_recipes')
-#     recipe_id = IntegerField()
+#class FavoriteRecipeModel(Model):
+#    id = AutoField(primary_key=True)
+#    user_id = ForeignKeyField(UserModel, backref='favorite_recipes')
+#    recipe_id = IntegerField()
 
-#     class Meta:
-#         database = database
-#         table_name = "favorite_recipes"
+#    class Meta:
+#        database = database
+#        table_name = "favorite_recipes"
 
-# class Group(Model):
-#     id = AutoField(primary_key=True)
-#     name = CharField(max_length=50)
+class GroupModel(Model):
+    id = AutoField(primary_key=True)
+    name = CharField(max_length=50)
 
-#     class Meta:
-#         database = database
-#         table_name = "groups"
+    class Meta:
+        database = database
+        table_name = "groups"
 
-# class IngredientCategory(Model):
-#     id = AutoField(primary_key=True)
-#     name = CharField(max_length=50)
+class IngredientCategoryModel(Model):
+    id = AutoField(primary_key=True)
+    name = CharField(max_length=50)
 
-#     class Meta:
-#         database = database
-#         table_name = "ingredient_categories"
+    class Meta:
+        database = database
+        table_name = "ingredient_categories"
 
-# class Ingredient(Model):
-#     id = AutoField(primary_key=True)
-#     name = CharField(max_length=50)
-#     category_id = ForeignKeyField(IngredientCategory, backref='ingredients')
-#     unit_id = IntegerField()
+class UnitModel(Model):
+    id = AutoField(primary_key=True)
+    name = CharField(max_length=50)
 
-#     class Meta:
-#         database = database
-#         table_name = "ingredients"
+    class Meta:
+        database = database
+        table_name = "units"
+
+class IngredientModel(Model):
+    id = AutoField(primary_key=True)
+    name = CharField(max_length=50)
+    category_id = ForeignKeyField(IngredientCategoryModel, backref='ingredients')
+    unit_id = ForeignKeyField(UnitModel, backref='ingredients')
+
+    class Meta:
+        database = database
+        table_name = "ingredients"
 
 # class MenuRecipe(Model):
 #     menu_id = IntegerField()
@@ -120,21 +128,21 @@ class UserModel(Model):
 #         database = database
 #         table_name = "recipe_recipe_types"
 
-# class Recipe(Model):
-#     id = AutoField(primary_key=True)
-#     name = CharField(max_length=50)
-#     description = TextField()
-#     instructions = TextField()
-#     preparation_time = IntegerField()
-#     datosNutricionales = TextField()
-#     type = CharField(max_length=50)
-#     difficulty = CharField(max_length=50)
-#     is_public = BooleanField()
-#     user_id = ForeignKeyField(UserModel, backref='recipes')
+class RecipeModel(Model):
+    id = AutoField(primary_key=True)
+    name = CharField(max_length=50)
+    description = TextField()
+    instructions = TextField()
+    preparation_time = IntegerField()
+    datosNutricionales = TextField()
+    type = CharField(max_length=50)
+    difficulty = CharField(max_length=50)
+    is_public = BooleanField()
+    user_id = ForeignKeyField(UserModel, backref='recipes')
 
-#     class Meta:
-#         database = database
-#         table_name = "recipes"
+    class Meta:
+        database = database
+        table_name = "recipes"
 
 # class RecipeType(Model):
 #     id = AutoField(primary_key=True)
@@ -165,19 +173,13 @@ class UserModel(Model):
 #     class Meta:
 #         database = database
 #         table_name = "shopping_lists"
+#
 
-# class Unit(Model):
-#     id = AutoField(primary_key=True)
-#     name = CharField(max_length=50)
+class UserGroupModel(Model):
+    id = AutoField(primary_key=True)
+    user_id = ForeignKeyField(UserModel, backref='user_groups', on_delete='CASCADE')
+    group_id = ForeignKeyField(GroupModel, backref='user_groups', on_delete='CASCADE')
 
-#     class Meta:
-#         database = database
-#         table_name = "units"
-
-# class UserGroup(Model):
-#     user_id = ForeignKeyField(UserModel, backref='user_groups')
-#     group_id = ForeignKeyField(Group, backref='user_groups')
-
-#     class Meta:
-#         database = database
-#         table_name = "user_groups"
+    class Meta:
+        database = database
+        table_name = "user_groups"

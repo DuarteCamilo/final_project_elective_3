@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel
 
 class Recipe(BaseModel):
     """Model representing a recipe."""
@@ -6,7 +6,7 @@ class Recipe(BaseModel):
     name: str
     description: str 
     instructions: str 
-    preparation_time: int = Field(..., gt=0)
+    preparation_time: int
     datosNutricionales: str
     type: str 
     difficulty: str
@@ -14,9 +14,9 @@ class Recipe(BaseModel):
     user_id: int
 
     # pylint: disable=E0213
-    @validator("preparation_time")
-    def valid_preparation_time(cls, v):
-        """Ensure preparation time is positive."""
-        if v <= 0:
-            raise ValueError("Preparation time must be positive")
-        return v
+    #@validator("preparation_time")
+    #def valid_preparation_time(cls, v):
+    #    """Ensure preparation time is positive."""
+    #    if v <= 0:
+    #        raise ValueError("Preparation time must be positive")
+    #    return v

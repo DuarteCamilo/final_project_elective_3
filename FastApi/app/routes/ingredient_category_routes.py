@@ -5,9 +5,9 @@ from fastapi import APIRouter, Body, HTTPException
 ingredient_category_route = APIRouter()
 
 @ingredient_category_route.post("/")
-async def create_ingredient_category(category: IngredientCategory = Body(...)):
+async def create_ingredient_category(ingredientCategory: IngredientCategory = Body(...)):
     """Create a new ingredient category."""
-    IngredientCategoryModel.create(name=category.name)
+    IngredientCategoryModel.create(name=ingredientCategory.name)
     return {"message": "Ingredient category created successfully"}
 
 @ingredient_category_route.get("/")
