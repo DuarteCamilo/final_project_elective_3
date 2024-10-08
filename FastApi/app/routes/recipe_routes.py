@@ -10,8 +10,12 @@ async def create_recipe(recipe: Recipe = Body(...)):
     RecipeModel.create(
         name=recipe.name,
         description=recipe.description,
-        preparation_time=recipe.preparation_time,
         instructions=recipe.instructions,
+        preparation_time=recipe.preparation_time,
+        datosNutricionales=recipe.datosNutricionales,
+        type_id=recipe.type_id,
+        difficulty=recipe.difficulty,
+        is_public=recipe.is_public,
         user_id=recipe.user_id
     )
     return {"message": "Recipe created successfully"}
