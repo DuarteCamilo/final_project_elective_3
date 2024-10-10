@@ -6,5 +6,5 @@ class ShoppingListItem(BaseModel):
     shopping_list_id: int
     ingredient_id: int
     quantity: float
-    unit: str
+    unit_id: int
     is_purchased: bool

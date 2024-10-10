@@ -79,18 +79,17 @@ class MenuModel(Model):
         database = database
         table_name = "menus"
 
-# class PantryItem(Model):
-#     id = AutoField(primary_key=True)
-#     quantity = FloatField()
-#     unit = CharField(max_length=50)//haccer lo mismo que esta en las otras tablas ajustandolo
-    #lo demas esta bueno es ajustarlo en el main solamente!
-#     expiry_date = DateField()
-#     user_id = ForeignKeyField(UserModel, backref='pantry_items')
-#     ingredient_id = ForeignKeyField(Ingredient, backref='pantry_items')
+class PantryItemModel(Model):
+    id = AutoField(primary_key=True)
+    quantity = FloatField()
+    unit_id = ForeignKeyField(UnitModel, backref='pantry_items')
+    expiry_date = DateField()
+    user_id = ForeignKeyField(UserModel, backref='pantry_items')
+    ingredient_id = ForeignKeyField(IngredientModel, backref='pantry_items')
 
-#     class Meta:
-#         database = database
-#         table_name = "pantry_items"
+    class Meta:
+        database = database
+        table_name = "pantry_items"
 
 class RecipeTypeModel(Model):
     id = AutoField(primary_key=True)
@@ -156,31 +155,27 @@ class RecipeIngredientModel(Model):
         database = database
         table_name = "recipe_ingredients"
 
-# class ShoppingListModel(Model):
-#     id = AutoField(primary_key=True)
-#     name = CharField(max_length=50)
-#     created_at = DateTimeField()
-#     user_id = ForeignKeyField(UserModel, backref='shopping_lists')
-        #esta bien hay que agregarlo es ajustar en el main el llamado
-#     class Meta:
-#         database = database
-#         table_name = "shopping_lists"
-#
+class ShoppingListModel(Model):
+    id = AutoField(primary_key=True)
+    name = CharField(max_length=50)
+    created_at = DateTimeField()
+    user_id = ForeignKeyField(UserModel, backref='shopping_lists')
 
-# class ShoppingListItemModel(Model):
-#     id = AutoField(primary_key=True)
-#     shopping_list_id = IntegerField() /// aqui tiene que hace lo de la forenea como esta abajo 
-            #pero con ShoppingList asi
-    #shopping_list_id =ForeignKeyField(ShoppingListModel, backref='shopping_list_items')
-#     ingredient_id = ForeignKeyField(Ingredient, backref='shopping_list_items')
-#     quantity = FloatField()
-#     unit = CharField(max_length=50)//lo mismo con unit fijese en cualquier otros que ya esta hecho es acomodarlo
-#     is_purchased = BooleanField()
-#
-#     class Meta:
-#         database = database
-#         table_name = "shopping_list_items"
+    class Meta:
+        database = database
+        table_name = "shopping_lists"
 
+class ShoppingListItemModel(Model):
+    id = AutoField(primary_key=True)
+    shopping_list_id = ForeignKeyField(ShoppingListModel, backref='shopping_list_items')
+    ingredient_id = ForeignKeyField(IngredientModel, backref='shopping_list_items')
+    quantity = FloatField()
+    unit_id = ForeignKeyField(UnitModel, backref='shopping_list_items')
+    is_purchased = BooleanField()
+
+    class Meta:
+        database = database
+        table_name = "shopping_list_items"
 
 class UserGroupModel(Model):
     id = AutoField(primary_key=True)
