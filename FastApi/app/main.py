@@ -15,9 +15,9 @@ from routes.notification_routes import notification_route
 from routes.favorite_recipe_routes import favorite_recipe_route
 from routes.menu_routes import menu_route
 from routes.menu_recipe_routes import menu_recipe_route
-#from routes.pantry_item_routes import pantry_item_route
-#from routes.shopping_list_item_routes import shopping_list_item_route
-#from routes.shopping_list_routes import shopping_list_route
+from routes.pantry_item_routes import pantry_item_route
+from routes.shopping_list_routes import shopping_list_route
+from routes.shopping_list_item_routes import shopping_list_item_route
 from routes.user_group_routes import user_group_route
 
 @asynccontextmanager
@@ -42,9 +42,9 @@ async def lifespan(_app: FastAPI):
             FavoriteRecipeModel,
             MenuModel,
             MenuRecipeModel,
-            # PantryItem,   
-            # ShoppingListItem,
-            # ShoppingList,
+            PantryItemModel,
+            ShoppingListModel,
+            ShoppingListItemModel,
             UserGroupModel
         ])
 
@@ -75,7 +75,6 @@ app.include_router(notification_route, prefix="/api/notifications", tags=["notif
 app.include_router(favorite_recipe_route, prefix="/api/favorite_recipes", tags=["favorite_recipes"])
 app.include_router(menu_route, prefix="/api/menus", tags=["menus"])
 app.include_router(menu_recipe_route, prefix="/api/menu_recipes", tags=["menu_recipes"])
-# app.include_router(pantry_item_route, prefix="/api/pantry_items", tags=["pantry_items"])
-# app.include_router(shopping_list_item_route, prefix="/api/shopping_list_items", tags=["shopping_list_items"])
-# app.include_router(shopping_list_route, prefix="/api/shopping_lists", tags=["shopping_lists"])
-
+app.include_router(pantry_item_route, prefix="/api/pantry_items", tags=["pantry_items"])
+app.include_router(shopping_list_route, prefix="/api/shopping_lists", tags=["shopping_lists"])
+app.include_router(shopping_list_item_route, prefix="/api/shopping_list_items", tags=["shopping_list_items"])
